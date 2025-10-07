@@ -8,4 +8,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
 
     id("com.rickclephas.kmp.nativecoroutines").version("1.0.0-ALPHA-47").apply(false)
+
+    // Room
+    alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.androidx.room) apply false
 }

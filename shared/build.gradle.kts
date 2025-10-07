@@ -7,6 +7,10 @@ plugins {
     id("com.rickclephas.kmp.nativecoroutines")
     // PLUGIN SKIE No va porque no soporta kotlin 2.2.20
 //    id("co.touchlab.skie") version "0.10.6"
+
+    //Room
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
 }
 
 kotlin {
@@ -18,7 +22,9 @@ kotlin {
 
     listOf(
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
+        //New
+        iosX64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "Shared"
@@ -35,9 +41,16 @@ kotlin {
         commonMain.dependencies {
             // put your Multiplatform dependencies here
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+            //Room
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        // Optional when using Room SQLite Wrapper
+        androidMain.dependencies {
+            implementation(libs.androidx.room.sqlite.wrapper)
         }
     }
 }
@@ -52,4 +65,17 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
+}
+
+//ksp
+ dependencies {
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+//    add("kspIosX64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+    // Add any other platform target you use in your project, for example kspDesktop
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }

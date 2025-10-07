@@ -12,6 +12,11 @@ Notes app for Android and iOS using Kotlin Multiplatform.
 
 Room database. Compatible con kmp.
 
+## Dudas
+
+iosX64() por que esto el el  build gradle de shared
+por que hemos quitado esto: add("kspIosX64", libs.androidx.room.compiler)?
+
 
 ## Docs
 
