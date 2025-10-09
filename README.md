@@ -17,6 +17,8 @@ Room database. Compatible con kmp.
 iosX64() por que esto el el  build gradle de shared
 por que hemos quitado esto: add("kspIosX64", libs.androidx.room.compiler)?
 
+He añadido una dependencia de Room (runtime) al build de androidMain porque sino no iba.
+
 
 ## Docs
 

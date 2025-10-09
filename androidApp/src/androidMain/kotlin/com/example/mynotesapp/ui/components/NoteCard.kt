@@ -14,11 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.mynotesapp.database.NoteEntity
 
 import com.example.mynotesapp.presentation.Note
 
 @Composable
-fun NoteCard(note: Note, modifier: Modifier = Modifier) {
+fun NoteCard(note: NoteEntity, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -36,11 +37,9 @@ fun NoteCard(note: Note, modifier: Modifier = Modifier) {
 @Preview(showBackground = false)
 @Composable
 fun NoteCardPreview() {
-    val note = Note(
-        id = "1",
+    val note = NoteEntity(
         title = "My Note",
         content = "This is the content of my note.",
-        colorHex = 0xFFF0F0F0
     )
 
     NoteCard(note = note)

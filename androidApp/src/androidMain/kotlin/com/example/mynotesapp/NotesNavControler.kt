@@ -1,8 +1,11 @@
 package com.example.mynotesapp
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -16,22 +19,24 @@ import com.example.mynotesapp.viewModels.HomeViewModel
 
 @Composable
 fun NotesNavHost(
+    noteRepository: NoteRepository,
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    noteRepository: NoteRepository = NoteRepository()
 ) {
+    val homeViewModel = remember { HomeViewModel(repository = noteRepository) }
+
     NavHost(
         navController = navController,
         startDestination = "home",
         modifier = modifier
     ) {
         composable(route = "home") {
-            val homeViewModel = remember { HomeViewModel(noteRepository) }
             HomeScreen(
                 onEditNote = { noteId ->
                     print("Note ID: $noteId")
                     navController.navigate("details/$noteId")
-                             }, homeViewModel)
+                             }
+                , homeViewModel)
         }
         composable(route = "details/{noteId}",
             arguments = listOf(navArgument("noteId"){type = NavType.StringType})
@@ -40,10 +45,12 @@ fun NotesNavHost(
             val detailsViewModel = remember { DetailsViewModel(noteId, noteRepository) }
             DetailsScreen(
                 onBack = {
-                    navController.navigate(route = "home")
+                    // navController.navigate(route = "home")
+                    navController.popBackStack()
                          },
                 onDelete = {
-                    navController.navigate(route = "home")
+                    // navController.navigate(route = "home")
+                    navController.popBackStack()
                 },
                 detailsViewModel= detailsViewModel)
         }

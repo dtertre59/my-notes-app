@@ -1,22 +1,40 @@
 package com.example.mynotesapp.viewModels
 
-import com.example.mynotesapp.presentation.Note
+import com.example.mynotesapp.database.NoteEntity
 import com.example.mynotesapp.repositories.NoteRepository
-import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class DetailsViewModel (noteId: String, private val repository: NoteRepository = NoteRepository()) {
-    @NativeCoroutinesState
-    val notes: StateFlow<List<Note>> = repository.notes
+class DetailsViewModel (noteId: String, private val repository: NoteRepository) {
+    private val viewModelScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    val note = repository.getNoteById(noteId)
+    private val _note = MutableStateFlow<NoteEntity?>(null)
+    val note: StateFlow<NoteEntity?> = _note.asStateFlow()
 
-    private val _title = MutableStateFlow(note?.title ?: "")
-    val title: StateFlow<String> = _title
+    private val _title = MutableStateFlow("")
+    val title: StateFlow<String> = _title.asStateFlow()
 
-    private val _content= MutableStateFlow(note?.content ?: "")
-    val content: StateFlow<String> = _content
+    private val _content = MutableStateFlow("")
+    val content: StateFlow<String> = _content.asStateFlow()
+
+    // 4. Usar un bloque `init` para la lógica de inicialización
+    init {
+        // `noteId` debe ser nullable para manejar la creación de nuevas notas
+        if (noteId != null && noteId != "new") { // Comprobación para "new" si usas esa ruta
+            // ¡Ahora sí puedes usar el scope que creaste!
+            viewModelScope.launch {
+                val fetchedNote = repository.getNoteById(noteId.toLong())
+                _note.value = fetchedNote
+                _title.value = fetchedNote?.title ?: ""
+                _content.value = fetchedNote?.content ?: ""
+            }
+        }
+    }
 
     fun onTitleChanged(newValue: String) {
         _title.value = newValue
@@ -28,16 +46,22 @@ class DetailsViewModel (noteId: String, private val repository: NoteRepository =
 
     fun back(
     ) {
-        if (note == null) {
-            repository.addNote(title.value, content.value, 0xFFE57373)
+        if (note.value == null) {
+            viewModelScope.launch {
+                repository.addNote(title.value, content.value)
+            }
         } else {
-            repository.updateNote(note.copy(title=title.value, content=content.value))
+            viewModelScope.launch {
+            repository.updateNote(note.value!!.copy(title=title.value, content=content.value))
+                }
         }
     }
     fun backDelete(
     ) {
-        if (note != null) {
-            repository.deleteNote(note)
+        if (note.value != null) {
+            viewModelScope.launch {
+                repository.deleteNote(note.value!!)
+            }
         }
     }
 }

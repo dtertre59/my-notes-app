@@ -1,6 +1,7 @@
 package com.example.mynotesapp
 
 import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -24,12 +25,16 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mynotesapp.repositories.NoteRepository
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
-fun NotesApp(navController: NavHostController = rememberNavController()) {
+fun NotesApp(
+    noteRepository: NoteRepository,
+    navController: NavHostController = rememberNavController()
+) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
@@ -66,7 +71,11 @@ fun NotesApp(navController: NavHostController = rememberNavController()) {
             }
         }
     ) { innerPadding ->
+//        Column {
+//            Text("Pedro", modifier = Modifier.padding(innerPadding))
+//        }
         NotesNavHost(
+            noteRepository= noteRepository,
             navController = navController,
             modifier = Modifier.padding(innerPadding)
         )

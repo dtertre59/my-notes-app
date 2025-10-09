@@ -21,6 +21,9 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation("androidx.navigation:navigation-compose:2.9.5")
 
+            // Room
+            implementation(libs.androidx.room.runtime)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)

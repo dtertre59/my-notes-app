@@ -43,7 +43,7 @@ import com.example.mynotesapp.viewModels.DetailsViewModel
 @Composable
 fun DetailsScreen (onBack: () -> Unit,
                    onDelete: () -> Unit,
-                   detailsViewModel: DetailsViewModel = DetailsViewModel(0.toString())){
+                   detailsViewModel: DetailsViewModel){
 
     val title by detailsViewModel.title.collectAsState()
     val content by detailsViewModel.content.collectAsState()
@@ -161,8 +161,9 @@ fun DetailsScreen (onBack: () -> Unit,
     }
 }
 
-@Preview(showBackground=true)
-@Composable
-fun DetailsScreenPrev() {
-    DetailsScreen({}, onDelete = {})
-}
+// TODO RT
+//@Preview(showBackground=true)
+//@Composable
+//fun DetailsScreenPrev() {
+//    DetailsScreen({}, onDelete = {}, detailsViewModel = DetailsViewModel(1)))
+//}
