@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mynotesapp.database.NoteEntity
+import com.example.mynotesapp.database.getRoomDatabase
 import com.example.mynotesapp.repositories.NoteRepository
 import database.getDatabaseBuilder
 
@@ -16,9 +17,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+        // val db = getNotesDatabase(applicationContext)
+
         val builder = getDatabaseBuilder(applicationContext)
-        val db = builder.build()
-//        val db = getNotesDatabase(applicationContext)
+//        val db = builder.build()
+
+        val db = getRoomDatabase(builder)
 
         val dao = db.getDao()
         val noteRepository = NoteRepository(dao)

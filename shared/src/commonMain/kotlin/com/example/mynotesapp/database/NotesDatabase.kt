@@ -14,7 +14,7 @@ abstract class NotesDatabase : RoomDatabase() {
     abstract fun getDao(): NoteDao
 }
 
-// The Room compiler generates the `actual` implementations.
+// The Room compiler generates the `actual` implementations. using function getRoomDatabase?
 @Suppress("KotlinNoActualForExpect")
 expect object NotesDatabaseConstructor : RoomDatabaseConstructor<NotesDatabase> {
     override fun initialize(): NotesDatabase

@@ -1,10 +1,14 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct iOSApp: App {
-    var body: some Scene {
+    var body: some Scene{
         WindowGroup {
-            ContentView2()
+            ContentView()
+            // ContentView2()
         }
+        // Swift Database
+        .modelContainer(for: Note.self)
     }
 }
